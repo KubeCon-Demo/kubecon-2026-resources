@@ -11,7 +11,7 @@ Missed the live demo or want to share it with your team? Watch the full pipeline
 
 ## 💻 Get the Code
 Grab our pipeline templates, the Tekton Tasks, and the `kubecon-demo` application code to try it yourself:
-👉 **[Explore the GitHub Repository]([INSERT_REPO_LINK_HERE])**
+👉 **[Explore the GitHub Repository]([https://github.com/KubeCon-Demo/kubecon-2026-resources])**
 
 ---
 
@@ -19,10 +19,10 @@ Grab our pipeline templates, the Tekton Tasks, and the `kubecon-demo` applicatio
 We'd love to keep the conversation going! Let's connect on LinkedIn:
 
 * **Mustafa Barış Ege** | DevOps Engineer at TÜBİTAK BİLGEM
-  * [Connect on LinkedIn]([INSERT_BARIS_LINKEDIN_HERE])
+  * [Connect on LinkedIn](www.linkedin.com/in/mustafa-baris-ege)
 
 * **Rabia Özge Aygül** | DevOps Engineer at TÜBİTAK BİLGEM
-  * [Connect on LinkedIn]([INSERT_OZGE_LINKEDIN_HERE])
+  * [Connect on LinkedIn]([www.linkedin.com/in/rabia-ozge-aygul])
 
 ---
 *Presented at KubeCon 2026, Amsterdam* 🌷
