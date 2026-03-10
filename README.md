@@ -18,11 +18,10 @@ Grab our pipeline templates, the Tekton Tasks, and the `kubecon-demo` applicatio
 ## 👋 Connect With Us
 We'd love to keep the conversation going! Let's connect on LinkedIn:
 
-* **Mustafa Barış Ege** | DevOps Engineer at TÜBİTAK BİLGEM
-  * [Connect on LinkedIn](www.linkedin.com/in/mustafa-baris-ege)
-
 * **Rabia Özge Aygül** | DevOps Engineer at TÜBİTAK BİLGEM
-  * [Connect on LinkedIn]([www.linkedin.com/in/rabia-ozge-aygul])
+  * [Connect on LinkedIn](https://www.linkedin.com/in/rabia-özge-aygül)
 
+* **Mustafa Barış Ege** | Kubestranout & DevOps Engineer at TÜBİTAK BİLGEM
+  * [Connect on LinkedIn](https://www.linkedin.com/in/mustafa-baris-ege)
 ---
 *Presented at KubeCon 2026, Amsterdam* 🌷
