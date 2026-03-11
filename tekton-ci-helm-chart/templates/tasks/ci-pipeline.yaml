@@ -1,0 +1,81 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: ci-pipeline
+spec:
+  description: >-
+    Fetches source code from a Git repository using SSH credentials, 
+    then builds and pushes a container image using Kaniko.
+  
+  # These parameters will be provided when you trigger the PipelineRun
+  params:
+    - name: repo-url
+      description: The SSH URL of the git repository.
+      type: string
+    - name: revision
+      description: The branch or tag to build.
+      type: string
+      default: "main"
+    - name: image-destination
+      description: The registry path where the image will be pushed.
+      type: string
+    # ADDED: The pipeline now expects the SHA as a parameter
+    - name: commit-sha 
+      type: string
+
+  # These workspaces map to physical volumes/secrets in the PipelineRun
+  workspaces:
+    - name: shared-data  # This will be your PVC
+    - name: ssh-creds    # Secret containing git SSH keys
+    - name: docker-creds # Secret containing registry auth
+
+  tasks:
+    # Task 1: Clone the repository
+    - name: fetch-source
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-data
+        - name: ssh-directory
+          workspace: ssh-creds
+      params:
+        - name: url
+          value: "$(params.repo-url)"
+        - name: revision
+          value: "$(params.revision)"
+
+    # Task 2: Build and Push the Image
+    - name: build-image
+      taskRef:
+        name: kaniko
+      runAfter:
+        - fetch-source # Ensures Kaniko waits for Git to finish
+      workspaces:
+        - name: source
+          workspace: shared-data
+        - name: dockerconfig
+          workspace: docker-creds
+      params:
+        - name: IMAGE
+          value: "$(params.image-destination)"
+
+    # Task 3: Teams notification      
+    - name: notify
+      runAfter:
+        - build-image
+      params:
+        - name: BUILT_STATUS
+          values: "$(tasks.build-image.results.IMAGE_DIGEST)"      
+  finally:
+    - name: report-pipeline-status
+      taskRef:
+        name: github-set-status
+      params:
+        - name: REPO_FULL_NAME
+          value: "KubeCon-Demo/dummy-app"
+        # CHANGED: We now use the parameter directly from the webhook!
+        - name: SHA
+          value: "$(params.commit-sha)" 
+        - name: PIPELINE_STATUS
+          value: "$(tasks.status)"

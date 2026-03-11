@@ -1,0 +1,52 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: git-clone
+spec:
+  description: "Simplified git clone using SSH and a PVC workspace with cleanup."
+  workspaces:
+    - name: output
+      description: The PVC where the repo will be cloned.
+    - name: ssh-directory
+      description: Secret containing SSH keys and known_hosts.
+  params:
+    - name: url
+      description: SSH Git URL (e.g., git@github.com:user/repo.git)
+      type: string
+    - name: revision
+      description: Branch, tag, or SHA to checkout.
+      type: string
+      default: "main"
+  results:
+    - name: commit
+      description: The SHA of the cloned revision.
+  steps:
+    - name: clone
+      image: alpine/git:latest
+      securityContext:
+        runAsUser: 0 
+      script: |
+        #!/usr/bin/env sh
+        set -e
+
+        # 1. Setup SSH
+        mkdir -p ~/.ssh
+        cp -LR $(workspaces.ssh-directory.path)/* ~/.ssh/
+        chmod 700 ~/.ssh
+        chmod 600 ~/.ssh/*
+
+        # 2. Clean the PVC directory from previous runs
+        rm -rf $(workspaces.output.path)/*
+        rm -rf $(workspaces.output.path)/.[!.]* || true 
+
+        # 3. Clean up the revision name from GitHub webhook
+        RAW_REVISION="$(params.revision)"
+        CLEAN_REVISION=${RAW_REVISION#refs/heads/} # Strips branch prefix
+        CLEAN_REVISION=${CLEAN_REVISION#refs/tags/}  # Strips tag prefix
+
+        # 4. Clone the repo using the clean branch name
+        git clone --depth 1 --branch "$CLEAN_REVISION" $(params.url) $(workspaces.output.path)
+
+        # 5. Save the commit SHA as a result
+        cd $(workspaces.output.path)
+        git rev-parse HEAD | tr -d '\n' > $(results.commit.path)
