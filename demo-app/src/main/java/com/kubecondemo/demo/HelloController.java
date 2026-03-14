@@ -6,8 +6,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
 
-    @GetMapping("/")
+    @GetMapping(value = "/", produces = "text/html")
     public String index() {
-        return "Hello From test-barisv4!";
+        return "<html style='height: 100%; display: flex; justify-content: center; align-items: center; background-color: #0055A4;'>" +
+               "<h1 style='font-size: 5rem; color: white; font-family: sans-serif; text-align: center;'>" +
+               "Hello From KubeCon 2026!<br><span style='font-size: 2rem;'>Version 1</span>" +
+               "</h1>" +
+               "</html>";
     }
 }
