@@ -6,14 +6,13 @@ spec:
   params:
     - name: BUILT_STATUS
       type: string
-
   steps:
     - name: send-message
       image: curlimages/curl:7.85.0
       script: |
         #!/bin/sh
 
-        if [ "$(params.BUILT_STATUS)" = "SUCCESS" ]; then
+        if [ "$(params.BUILT_STATUS)" = "Succeeded" ]; then
           STATUS_EMOJI="✅"
           STATUS_TEXT="Pipeline succeeded"
         else
@@ -28,9 +27,9 @@ spec:
         $(cat /secret/url)
 
       volumeMounts:
-        - name: wehbook-secret
+        - name: teams-webhook
           mountPath: /secret
   volumes:
-    - name: wehbook-secret
+    - name: teams-webhook
       secret:
-        secretName: { .Values.wehbook-secret }
+        secretName: "{{ .Values.webhookSecret }}"

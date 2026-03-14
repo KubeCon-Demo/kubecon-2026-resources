@@ -1,2 +1,0 @@
-# tekton
-Tekton chart

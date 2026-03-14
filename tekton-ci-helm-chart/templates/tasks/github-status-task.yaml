@@ -6,7 +6,7 @@ spec:
   description: Sets the GitHub commit status using a lightweight curl container.
   params:
     - name: REPO_FULL_NAME
-      description: The GitHub repository full name, e.g., KubeCon-Demo/dummy-app
+      description: The GitHub repository full name, e.g., KubeCon-Demo/demo-app
       type: string
     - name: SHA
       description: Commit SHA to set the status for.
@@ -22,7 +22,7 @@ spec:
         - name: GITHUB_TOKEN
           valueFrom:
             secretKeyRef:
-              name: github-pat-secret 
+              name: {{ .Values.githubPatSecret }}
               key: token
       script: |
         #!/bin/sh

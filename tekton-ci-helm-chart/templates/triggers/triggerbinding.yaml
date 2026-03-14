@@ -1,0 +1,16 @@
+
+# ==========================================
+# Extracts the branch and repo URL from GitHub
+# ==========================================
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerBinding
+metadata:
+  name: github-push-binding
+spec:
+  params:
+    - name: git-revision
+      value: $(body.ref) # e.g., refs/heads/main
+    - name: git-url
+      value: $(body.repository.ssh_url) # e.g., git@github.com:org/repo.git
+    - name: commit-sha
+      value: $(body.after)

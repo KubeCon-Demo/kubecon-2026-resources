@@ -59,23 +59,23 @@ spec:
       params:
         - name: IMAGE
           value: "$(params.image-destination)"
-
-    # Task 3: Teams notification      
-    - name: notify
-      runAfter:
-        - build-image
-      params:
-        - name: BUILT_STATUS
-          values: "$(tasks.build-image.results.IMAGE_DIGEST)"      
+ 
   finally:
+    # Report the pipeline build status to the github repository   
     - name: report-pipeline-status
       taskRef:
         name: github-set-status
       params:
         - name: REPO_FULL_NAME
-          value: "KubeCon-Demo/dummy-app"
-        # CHANGED: We now use the parameter directly from the webhook!
+          value: "KubeCon-Demo/kubecon-2026-resources"
         - name: SHA
           value: "$(params.commit-sha)" 
         - name: PIPELINE_STATUS
           value: "$(tasks.status)"
+    # Teams notification      
+    - name: notify
+      taskRef:
+        name: notify-teams
+      params:
+        - name: BUILT_STATUS
+          value: "$(tasks.status)"           
