@@ -1,0 +1,25 @@
+# ==========================================
+# Listens for the webhook, verifies the secret, and runs the template
+# ==========================================
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: github-listener
+spec:
+  serviceAccountName: tekton-triggers-sa 
+  triggers:
+    - name: github-push-trigger
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: "secretRef"
+              value:
+                secretName: {{ .Values.githubWebhookSecret }}
+                secretKey: secretToken
+            - name: "eventTypes"
+              value: ["push"]
+      bindings:
+        - ref: github-push-binding
+      template:
+        ref: ci-pipeline-template

@@ -1,0 +1,12 @@
+# Secret containing the Microsoft Teams webhook URL used to send pipeline build status notifications
+webhookSecret: "teams-webhook" 
+# PersistentVolumeClaim used as a shared workspace between Tekton tasks in the pipeline
+sharedWorkspacePVC: "shared-workspace-pvc"
+# Secret used to validate incoming GitHub webhook requests in Tekton Triggers
+githubWebhookSecret: "github-webhook-secret"
+# Secret containing the SSH private key used for authenticating to the Git repository
+sshCredentials: "ssh-creds"
+# Secret containing Docker registry credentials used for pushing images (e.g., by Kaniko)
+dockerCredentials: "docker-hub-creds"
+# Secret containing a GitHub Personal Access Token used for GitHub API operations
+githubPatSecret: "github-pat-secret"

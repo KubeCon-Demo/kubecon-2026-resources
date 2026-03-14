@@ -1,0 +1,35 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: notify-teams
+spec:
+  params:
+    - name: BUILT_STATUS
+      type: string
+  steps:
+    - name: send-message
+      image: curlimages/curl:7.85.0
+      script: |
+        #!/bin/sh
+
+        if [ "$(params.BUILT_STATUS)" = "Succeeded" ]; then
+          STATUS_EMOJI="✅"
+          STATUS_TEXT="Pipeline succeeded"
+        else
+          STATUS_EMOJI="❌"
+          STATUS_TEXT="Pipeline failed"
+        fi
+
+        curl -H "Content-Type: application/json" \
+        -d "{
+          \"text\": \"$STATUS_EMOJI **$STATUS_TEXT**\nStatus: $(params.BUILT_STATUS)\"
+        }" \
+        $(cat /secret/url)
+
+      volumeMounts:
+        - name: teams-webhook
+          mountPath: /secret
+  volumes:
+    - name: teams-webhook
+      secret:
+        secretName: "{{ .Values.webhookSecret }}"

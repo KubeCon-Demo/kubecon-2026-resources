@@ -1,0 +1,46 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: kaniko
+spec:
+  description: Builds a Dockerfile with Kaniko and pushes it to a registry.
+  workspaces:
+    - name: source
+      description: The PVC holding the context and Dockerfile.
+    - name: dockerconfig
+      description: Secret containing a docker config.json for registry authentication.
+      mountPath: /kaniko/.docker 
+  params:
+    - name: IMAGE
+      description: Full name and tag of the image to build (e.g., myregistry.com/my-app:latest).
+      type: string
+    - name: DOCKERFILE
+      description: Path to the Dockerfile relative to the workspace.
+      type: string
+      default: "./demo-app/Dockerfile"
+    - name: CONTEXT
+      description: The build context path.
+      type: string
+      default: "./demo-app"
+  results:
+    - name: IMAGE_DIGEST
+      description: Digest of the image just built.
+    - name: IMAGE_URL
+      description: URL of the image just built.
+  steps:
+    - name: build-and-push
+      image: gcr.io/kaniko-project/executor:latest
+      workingDir: $(workspaces.source.path)
+      securityContext:
+        runAsUser: 0 # Kaniko requires root to build
+      args:
+        - --dockerfile=$(params.DOCKERFILE)
+        - --context=$(workspaces.source.path)/$(params.CONTEXT)
+        - --destination=$(params.IMAGE)
+        - --digest-file=$(results.IMAGE_DIGEST.path)
+    - name: write-url
+      image: bash:latest
+      script: |
+        #!/usr/bin/env bash
+        set -e
+        echo -n "$(params.IMAGE)" > "$(results.IMAGE_URL.path)"
