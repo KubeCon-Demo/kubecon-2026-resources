@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-app-helm
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'git@github.com:KubeCon-Demo/demo-app-helm.git'
+    targetRevision: main
+    path: demo-app-helm 
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: demo-app
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

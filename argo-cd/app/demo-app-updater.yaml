@@ -1,0 +1,20 @@
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: kubecon-demo-updater
+  namespace: argocd
+spec:
+  namespace: argocd 
+  applicationRefs:
+    - namePattern: "demo-app-helm" 
+      images:
+        - alias: "kubecon-app"
+          imageName: "barisege/kubecon-demo:latest"
+          commonUpdateSettings:
+            updateStrategy: "digest"        
+          manifestTargets:
+            helm:
+              name: "image.repository" 
+              tag: "image.tag"             
+      writeBackConfig:
+        method: "argocd"
