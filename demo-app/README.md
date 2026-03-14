@@ -1,2 +1,2 @@
 # demo-app
-demo app to trigger tekton pipelines
+demo-app project to illustrate Git-Ops workflow from Tekton pipelines to ArgoCD
