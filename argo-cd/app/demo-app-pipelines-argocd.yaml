@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-app-pipelines
+  namespace: argocd
+spec:
+  destination:
+    namespace: demo-app-pipelines
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    helm:
+      valueFiles:
+      - values.yaml
+    path: tekton-ci-helm-chart
+    repoURL: https://github.com/KubeCon-Demo/kubecon-2026-resources.git
+    targetRevision: main

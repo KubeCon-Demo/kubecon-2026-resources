@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'git@github.com:KubeCon-Demo/demo-app-helm.git'
+    repoURL: 'https://github.com/KubeCon-Demo/kubecon-2026-resources.git'
     targetRevision: main
     path: demo-app-helm 
   destination:
