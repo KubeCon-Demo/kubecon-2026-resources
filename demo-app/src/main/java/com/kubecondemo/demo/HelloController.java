@@ -10,7 +10,7 @@ public class HelloController {
     public String index() {
         return "<html style='height: 100%; display: flex; justify-content: center; align-items: center; background-color: #28A745;'>" +
                "<h1 style='font-size: 5rem; color: white; font-family: sans-serif; text-align: center;'>" +
-               "Hello From KubeCon 2026!<br><span style='font-size: 2rem;'>Version 0.3</span>" +
+               "Hello From KubeCon 2026!<br><span style='font-size: 2rem;'>Version 0.5</span>" +
                "</h1>" +
                "</html>";
     }
