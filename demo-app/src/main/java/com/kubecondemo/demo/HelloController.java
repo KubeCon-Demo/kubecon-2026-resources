@@ -8,9 +8,9 @@ public class HelloController {
 
     @GetMapping(value = "/", produces = "text/html")
     public String index() {
-        return "<html style='height: 100%; display: flex; justify-content: center; align-items: center; background-color: #0000FF;'>" +
+        return "<html style='height: 100%; display: flex; justify-content: center; align-items: center; background-color: #00FF00;'>" +
                "<h1 style='font-size: 5rem; color: white; font-family: sans-serif; text-align: center;'>" +
-               "Hello From KubeCon 2026!<br><span style='font-size: 2rem;'>Version 1</span>" +
+               "Hello From KubeCon 2026!<br><span style='font-size: 2rem;'>Version 2</span>" +
                "</h1>" +
                "</html>";
     }
